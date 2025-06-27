@@ -1,8 +1,12 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 db = SQLAlchemy()  # moved outside without app
 migrate = Migrate()
@@ -11,7 +15,9 @@ login_manager.login_view = "login"
 
 def create_app():
     app = Flask(__name__, template_folder='../templates')
-    app.secret_key = "secret123"
+#    app.secret_key = "secret123"
+
+    app.secret_key = os.environ.get("SECRET_KEY", "fallback-secret")
 
     basedir = os.path.abspath(os.path.dirname(__file__))
     db_path = os.path.join(basedir, '../data.db')

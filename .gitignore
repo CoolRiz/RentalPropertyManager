@@ -1,0 +1,8 @@
+# Ignore environment variable files
+.env
+
+# Ignore local database (optional but recommended)
+data.db
+
+# Ignore virtual environment folder (if exists in project)
+venv/
