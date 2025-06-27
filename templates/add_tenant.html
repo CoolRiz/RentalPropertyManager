@@ -1,6 +1,8 @@
-<!-- templates/add_tenant.html -->
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %} <!-- Use base layout for common header/footer -->
+
+{% block content %}
+
+
 <head>
     <title>Add Tenant</title>
 </head>
@@ -64,4 +66,5 @@
     <br>
     <a href="{{ url_for('app_routes.home') }}">Back to Home</a></br>
 </body>
-</html>
+
+{% endblock %}

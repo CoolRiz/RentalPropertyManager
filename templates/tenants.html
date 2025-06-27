@@ -2,8 +2,10 @@
 
 {% block content %}  <!-- Start of content block -->
 
+
 <h2>All Tenants</h2>
 
+<body
 <!-- Table of all tenant records -->
 <table border="1" cellpedding="10">  <!-- Basic HTML table -->
     <thead>
@@ -45,7 +47,9 @@
     {% endfor %}
     </tboady>
 </table>
-
+ <br>
+    <a href="{{ url_for('app_routes.home') }}">Back to Home</a></br>
+</body
 {% endblock %}  <!-- End of content block -->
 
 
