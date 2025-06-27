@@ -2,7 +2,6 @@
 
 {% block content %}
 <h2>All Properties</h2>
-
 <!-- Display a table of properties -->
 <table border="1" cellpadding="8" cellspacing="0">
     <tr>
@@ -22,8 +21,8 @@
         <td>{{ p.address }}</td>        <!-- Display address -->
         <td>{{ p.amenities }}</td>      <!-- Display amenities -->
          <td>
-            <a href="{{ url_for('edit_property', property_id=p.id) }}">Edit</a> |
-            <form action="{{ url_for('delete_property', property_id=p.id) }}" method="POST" style="display:inline;">
+            <a href="{{ url_for('app_routes.edit_property', property_id=p.id) }}">Edit</a> |
+            <form action="{{ url_for('app_routes.delete_property', property_id=p.id) }}" method="POST" style="display:inline;">
                 <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
             </form>
         </td>
@@ -31,4 +30,8 @@
     {% endfor %}
 </table>
 
+ <br>
+    <a href="{{ url_for('app_routes.home') }}">Back to Home</a></br>
+
+    
 {% endblock %}
