@@ -15,8 +15,16 @@ from datetime import datetime, timedelta
 
 app_routes = Blueprint('app_routes', __name__)
 
+@app_routes.route("/")
+def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("app_routes.dashboard"))
+    return redirect(url_for("app_routes.login"))
+
+    
 # Route for the home page (optional — can be updated to show dashboard)
 @app_routes.route("/")
+@login_required
 def home():    
     return render_template("home.html")  # Load a template (can be replaced with dashboard)
 
@@ -118,6 +126,7 @@ def add_tenant():
 # --------------------
 
 @app_routes.route("/tenants")
+@login_required
 def list_tenants():
     tenants = Tenant.query.all()  # Fetch all tenants from the database
     return render_template("tenants.html", tenants=tenants)  # Render the list
@@ -247,6 +256,7 @@ def add_rent():
 # List Rent Records Route
 # --------------------
 @app_routes.route("/rents")
+@login_required
 def list_rents():
     rents = Rent.query.all()  # Fetch all rent records
     return render_template("rents.html", rents=rents)  # Show rent records
@@ -263,6 +273,7 @@ def test_template():
 # Edit Rent Payment Route
 # --------------------
 @app_routes.route("/edit-rent/<int:rent_id>", methods=["GET", "POST"])
+@login_required
 def edit_rent(rent_id):
     rent = Rent.query.get_or_404(rent_id)  # Fetch the rent record by ID or return 404
     tenants = Tenant.query.all()  # Fetch tenants to populate dropdown
@@ -293,6 +304,7 @@ def edit_rent(rent_id):
 # Delete Rent Entry Route
 # -------------------------
 @app_routes.route("/delete-rent/<int:rent_id>", methods=["POST"])
+@login_required
 def delete_rent(rent_id):
     rent = Rent.query.get_or_404(rent_id)  # Find rent entry or return 404
     try:
@@ -306,6 +318,7 @@ def delete_rent(rent_id):
 
 
 @app_routes.route("/rent-summary", methods=["GET", "POST"])
+@login_required
 def rent_summary():
     tenants = Tenant.query.all()
     rents = Rent.query
@@ -337,6 +350,7 @@ def rent_summary():
 # Route: Export Rent Summary to PDF
 # --------------------
 @app_routes.route("/export-rent-summary", methods=["GET"])
+@login_required
 def export_rent_summary_pdf():
     rents = Rent.query
     if request.form.get("month"):
@@ -410,6 +424,7 @@ def dashboard():
     )
 """
 @app_routes.route('/due-rents')
+@login_required
 def due_rents():
     current_month = datetime.now().strftime('%B')
     current_year = datetime.now().year
@@ -435,6 +450,7 @@ def due_rents():
 
 
 @app_routes.route('/lease-expiry-alerts')
+@login_required
 def lease_expiry_alerts():
     today = datetime.now().date()
     upcoming_expiry = today + timedelta(days=30)

@@ -24,9 +24,14 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+    app.config['SESSION_COOKIE_SECURE'] = True  # use HTTPS
+    app.config['REMEMBER_COOKIE_SECURE'] = True
+
     db.init_app(app)         # initialize with app context
     migrate.init_app(app, db)
     login_manager.init_app(app)
+
+    login_manager.login_message = "Please log in to access this page."
 
     from mainapp.models import User  # import after db init
     from mainapp.routes import app_routes
