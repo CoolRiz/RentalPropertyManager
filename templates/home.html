@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>All Properties</h2>
+
+<!-- Display property list in a table -->
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Size (sqft)</th>
+        <th>Address</th>
+        <th>Amenities</th>
+    </tr>
+    {% for p in properties %}
+    <tr>
+        <td>{{ p.name }}</td>
+        <td>{{ p.property_type }}</td>
+        <td>{{ p.size_sqft }}</td>
+        <td>{{ p.address }}</td>
+        <td>{{ p.amenities }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

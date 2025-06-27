@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Property</h2>
+<form method="POST">
+    <label>Name:</label><br>
+    <input type="text" name="name" value="{{ property.name }}"><br><br>
+
+    <label>Address:</label><br>
+    <input type="text" name="address" value="{{ property.address }}"><br><br>
+
+    <label>Type:</label><br>
+    <select name="property_type">
+        <option {% if property.property_type == 'Home' %}selected{% endif %}>Home</option>
+        <option {% if property.property_type == 'Commercial' %}selected{% endif %}>Commercial</option>
+    </select><br><br>
+
+    <label>Size (sqft):</label><br>
+    <input type="number" name="size_sqft" value="{{ property.size_sqft }}"><br><br>
+
+    <label>Amenities:</label><br>
+    <textarea name="amenities">{{ property.amenities }}</textarea><br><br>
+
+    <input type="submit" value="Update Property">
+</form>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Due Rent Alerts{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-danger">Due Rent Alerts - {{ current_month }} {{ current_year }}</h2>
+
+    {% if tenants %}
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Tenant Name</th>
+                    <th>Contact</th>
+                    <th>Property</th>
+                    <th>Monthly Rent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in tenants %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ t.name }}</td>
+                    <td>{{ t.contact }}</td>
+                    <td>{{ t.property.name if t.property else 'N/A' }}</td>
+                    <td>₹{{ t.rent }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-success">🎉 All tenants have paid rent for this month.</p>
+    {% endif %}
+</div>
+{% endblock %}

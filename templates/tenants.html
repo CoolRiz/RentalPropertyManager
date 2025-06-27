@@ -1,0 +1,51 @@
+{% extends 'base.html' %}  <!-- Inherit layout from base.html -->
+
+{% block content %}  <!-- Start of content block -->
+
+<h2>All Tenants</h2>
+
+<!-- Table of all tenant records -->
+<table border="1" cellpedding="10">  <!-- Basic HTML table -->
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Business</th>
+            <th>Lease Start</th>
+            <th>Lease End</th>
+            <th>Rent</th>
+            <th>Deposit</th>
+            <th>properties</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tboady>    
+    <!-- Loop through each tenant and show their details -->
+    {% for t in tenants %}
+    <tr>
+        <td>{{ t.name }}</td>  <!-- Tenant name -->
+        <td>{{ t.contact }}</td>  <!-- Contact -->
+        <td>{{ t.business_type }}</td>  <!-- Business type -->
+        <td>{{ t.lease_start }}</td>  <!-- Lease Start -->
+        <td>{{ t.lease_end }}</td>  <!-- Lease End -->
+        <td>{{ t.rent }}</td>  <!-- Rent amount -->
+        <td>{{ t.deposit }}</td>  <!-- Deposit -->
+        <td>{{ t.property.name if t.property else 'N/A' }}</td>
+    
+        <td>
+            <!-- Edit Button -->
+            <a href="{{ url_for('edit_tenant', tenant_id=t.id) }}" class="btn btn-sm btn-primary">Edit</a>
+
+            <!-- Delete Button (POST form) -->
+            <form action="{{ url_for('delete_tenant', tenant_id=t.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+        </td>
+    </tr>    
+    {% endfor %}
+    </tboady>
+</table>
+
+{% endblock %}  <!-- End of content block -->
+
+

@@ -1,0 +1,67 @@
+<!-- templates/add_tenant.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Tenant</title>
+</head>
+<body>
+    <h1>Add Tenant</h1>
+
+    <!-- Show success/error messages if any -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li style="color: green;">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Tenant Form -->
+    <form method="POST" action="/add-tenant">
+
+        <!-- Tenant Name -->
+        <label for="name">Tenant Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <!-- Contact -->
+        <label for="contact">Contact:</label><br>
+        <input type="text" id="contact" name="contact" required><br><br>
+
+        <!-- Business Type -->
+        <label for="business_type">Business Type:</label><br>
+        <input type="text" id="business_type" name="business_type"><br><br>
+
+        <!-- Lease Start Date -->
+        <label for="lease_start">Lease Start Date:</label><br>
+        <input type="date" id="lease_start" name="lease_start" required><br><br>
+
+        <!-- Lease End Date -->
+        <label for="lease_end">Lease End Date:</label><br>
+        <input type="date" id="lease_end" name="lease_end"><br><br>
+
+        <!-- Rent -->
+        <label for="rent">Monthly Rent:</label><br>
+        <input type="number" id="rent" name="rent" required><br><br>
+
+        <!-- Deposit -->
+        <label for="deposit">Security Deposit:</label><br>
+        <input type="number" id="deposit" name="deposit"><br><br>
+
+        <!-- Property Dropdown -->
+        <label for="property_id">Select Property:</label><br>
+        <select id="property_id" name="property_id" required>
+            {% for property in properties %}
+                <option value="{{ property.id }}">{{ property.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Submit Button -->
+        <input type="submit" value="Add Tenant">
+    </form>
+
+    <br>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

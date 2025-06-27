@@ -1,0 +1,57 @@
+{% extends "base.html" %}  <!-- Inherit layout from base -->
+
+{% block content %}
+<h2>All Rent Payments</h2>
+
+<!-- Flash messages like success or error -->
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Tenant</th>
+      <th>Month</th>
+      <th>Year</th>
+      <th>Amount Paid</th>
+      <th>Payment Date</th>
+      <th>Remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rent in rents %}
+    <tr>
+      <td>{{ rent.tenant.name }}</td>
+      <td>{{ rent.month }}</td>
+      <td>{{ rent.year }}</td>
+      <td>{{ rent.amount_paid }}</td>
+      <td>{{ rent.payment_date }}</td>
+      <td>{{ rent.remarks or '' }}</td>
+
+
+      <td>
+        <!-- Edit Button -->
+        <a href="{{ url_for('edit_rent', rent_id=rent.id) }}" class="btn btn-sm btn-warning">Edit</a>
+
+        <!-- Delete Form Button -->
+        <form action="{{ url_for('delete_rent', rent_id=rent.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+        </form>
+      </td>
+
+    </tr>
+    
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ url_for('add_rent') }}">+ Add New Rent Entry</a>
+
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Title -->
+    <h2 class="mb-4">Dashboard</h2>
+
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <!-- Total Properties -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Properties</h5>
+                    <p class="card-text display-6">{{ total_properties }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Tenants -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Tenants</h5>
+                    <p class="card-text display-6">{{ total_tenants }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rent Collected This Month -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Rent Collected</h5>
+                    <p class="card-text display-6">₹{{ total_rent_collected }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Rent -->
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Rent</h5>
+                    <p class="card-text display-6">{{ pending_rent_tenants|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Tenants with Pending Rent -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            Tenants With Pending Rent (This Month)
+        </div>
+        <div class="card-body">
+            {% if pending_rent_tenants %}
+            <ul>
+                {% for tenant in pending_rent_tenants %}
+                <li>{{ tenant.name }} ({{ tenant.contact }})</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-success">All tenants have paid rent this month.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Section: Upcoming Lease Expiry -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            Leases Expiring in Next 30 Days
+        </div>
+        <div class="card-body">
+            {% if lease_expiry_soon %}
+            <ul>
+                {% for tenant in lease_expiry_soon %}
+                <li>{{ tenant.name }} – Lease Ends: {{ tenant.lease_end.strftime('%Y-%m-%d') }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-success">No leases expiring in the next 30 days.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mt-4">
+        <a href="{{ url_for('add_property') }}" class="btn btn-outline-primary">+ Add Property</a>
+        <a href="{{ url_for('add_tenant') }}" class="btn btn-outline-success">+ Add Tenant</a>
+        <a href="{{ url_for('add_rent') }}" class="btn btn-outline-info">+ Add Rent</a>
+        <a href="{{ url_for('rent_summary') }}" class="btn btn-outline-secondary">📊 Rent Summary</a>
+    </div>
+
+</div>
+{% endblock %}

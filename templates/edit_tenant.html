@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit Tenant</h2>
+
+<form method="POST">
+
+    <!-- Name field -->
+    <label>Name:</label><br>
+    <input type="text" name="name" value="{{ tenant.name }}" required><br><br>
+
+    <!-- Contact field -->
+    <label>Contact:</label><br>
+    <input type="text" name="contact" value="{{ tenant.contact }}" required><br><br>
+
+    <!-- Business Type -->
+    <label>Business Type:</label><br>
+    <input type="text" name="business_type" value="{{ tenant.business_type }}" required><br><br>
+    </select><br><br>
+
+    <!-- Lease Start Date -->    
+    <label>Lease Start:</label><br>
+    <input type="date" name="lease_start" value="{{ tenant.lease_start }}" required><br><br>
+
+    <!-- Lease End Date -->    
+    <label>Lease End:</label><br>
+    <input type="date" name="lease_end" value="{{ tenant.lease_end }}" required><br><br>
+
+    <!-- Rent -->    
+    <label>Rent:</label><br>
+    <input type="number" name="rent" value="{{ tenant.rent }}" required><br><br>
+
+    <!-- Deposit -->    
+    <label>Deposit:</label><br>
+    <input type="number" name="deposit" value="{{ tenant.deposit }}" required><br><br>
+
+    <!-- Property dropdown -->
+    <label>Property:</label><br>
+    <select name="property_id" required>
+        {% for property in properties %}
+            <option value="{{ property.id }}" {% if property.id == tenant.property_id %}selected{% endif %}>
+                {{ property.name }}
+            </option>
+        {% endfor %}
+    </select><br><br>
+
+    <!-- Submit button -->    
+    <input type="submit" value="Update Tenant">
+
+</form>
+{% endblock %}
+

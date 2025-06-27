@@ -1,0 +1,52 @@
+<!-- Extend the base layout -->
+{% extends "base.html" %}
+
+<!-- Define the content section -->
+{% block content %}
+<h2>Add Rent Payment</h2>
+
+<!-- Rent form begins -->
+<form method="POST" action="{{ url_for('add_rent') }}">
+    
+    <!-- Select Tenant -->
+    <label for="tenant_id">Tenant:</label>
+    <select name="tenant_id" id="tenant_id" required>
+        <option value="">-- Select Tenant --</option>
+        {% for tenant in tenants %}
+        <option value="{{ tenant.id }}">{{ tenant.name }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <!-- Month -->
+    <label for="month">Month:</label>
+    <select name="month" id="month" required>
+        <option value="">-- Select Month --</option>
+        {% for month in ["January", "February", "March", "April", "May", "June",
+                         "July", "August", "September", "October", "November", "December"] %}
+        <option value="{{ month }}">{{ month }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <!-- Year -->
+    <label for="year">Year:</label>
+    <input type="text" name="year" value="{{ current_year }}" required>
+    <br><br>
+
+    <!-- Amount -->
+    <label for="amount">Amount Paid(INR):</label>
+    <input type="number" name="amount" id="amount" required>
+    <br><br>
+
+    <!-- Payment Date -->
+    <label for="payment_date">Payment Date:</label>
+    <input type="date" name="payment_date" id="payment_date" required>
+    <br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Add Rent</button>
+</form>
+
+<!-- End of content block -->
+{% endblock %}

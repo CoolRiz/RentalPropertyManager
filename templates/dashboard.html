@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+<div class="container py-4">
+    <div class="row g-3">
+        <div class="col-md-3 col-6">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body text-center">
+                    <h5>Total Properties</h5>
+                    <h3>{{ total_properties }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body text-center">
+                    <h5>Total Tenants</h5>
+                    <h3>{{ total_tenants }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body text-center">
+                    <h5>Rent Collected</h5>
+                    <h3>&#8377;{{ total_rent_collected }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="card text-white bg-danger h-100">
+                <div class="card-body text-center">
+                    <h5>Due Rent</h5>
+                    <h3>{{ pending_rent_tenants|length }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section for alerts (below cards) -->
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header bg-danger text-white">View Due Rent Alerts</div>
+                <div class="card-body p-2">
+                    <ul class="list-group">
+                        {% for t in pending_rent_tenants %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ t.name }}
+                            <span class="badge bg-danger">Due</span>
+                        </li>
+                        {% endfor %}
+                        {% if pending_rent_tenants|length == 0 %}
+                        <li class="list-group-item">No due rent alerts</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">Lease Expiry Alerts</div>
+                <div class="card-body p-2">
+                    <ul class="list-group">
+                        {% for t in lease_expiry_soon %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ t.name }} - {{ t.lease_end.strftime('%Y-%m-%d') }}
+                            <span class="badge bg-warning text-dark">Expiring</span>
+                        </li>
+                        {% endfor %}
+                        {% if lease_expiry_soon|length == 0 %}
+                        <li class="list-group-item">No lease expiry alerts</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+"""
+
+
+{% endblock %}

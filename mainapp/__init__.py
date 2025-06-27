@@ -1,0 +1,33 @@
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+import os
+
+db = SQLAlchemy()  # moved outside without app
+migrate = Migrate()
+login_manager = LoginManager()
+login_manager.login_view = "login"
+
+def create_app():
+    app = Flask(__name__, template_folder='../templates')
+    app.secret_key = "secret123"
+
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(basedir, '../data.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    db.init_app(app)         # initialize with app context
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+
+    from mainapp.models import User  # import after db init
+    from mainapp.routes import app_routes
+    app.register_blueprint(app_routes)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    return app

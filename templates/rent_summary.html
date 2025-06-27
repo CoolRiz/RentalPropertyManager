@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Rent Summary Report</h2>
+
+<!-- Filter Form -->
+<form method="GET" class="form-inline mb-4">
+    <label>Month:</label>
+    <select name="month" class="form-control mx-2">
+        <option value="">-- All --</option>
+        {% for m in months %}
+        <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Year:</label>
+    <input type="text" name="year" class="form-control mx-2" placeholder="e.g. 2025" value="{{ selected_year or '' }}">
+
+    <label>Property:</label>
+    <select name="property_id" class="form-control mx-2">
+        <option value="">-- All --</option>
+        {% for prop in properties %}
+        <option value="{{ prop.id }}" {% if prop.id|string == selected_property_id %}selected{% endif %}>{{ prop.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+
+    <!-- Export Button -->
+    <a href="{{ url_for('export_rent_summary_pdf', month=selected_month, year=selected_year, property_id=selected_property_id) }}"
+       class="btn btn-sm btn-outline-primary" target="_blank">Export to PDF</a>
+       
+</form>
+
+<!-- Rent Table -->
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tenant</th>
+            <th>Property</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Amount Paid (INR)</th>
+            <th>Payment Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rent in rents %}
+        <tr>
+            <td>{{ rent.tenant.name }}</td>
+            <td>{{ rent.tenant.property.name }}</td>
+            <td>{{ rent.month }}</td>
+            <td>{{ rent.year }}</td>
+            <td>{{ rent.amount_paid }}</td>
+            <td>{{ rent.payment_date.strftime('%d-%m-%Y') }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="4" class="text-right">Total</th>
+            <th colspan="2">{{ total_amount }}</th>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}

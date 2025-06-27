@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Edit Rent Entry</h2>
+
+<form method="POST">
+    <!-- Tenant Dropdown -->
+    <label>Tenant:</label><br>
+    <select name="tenant_id" required>
+        <option value="">-- Select Tenant --</option>
+        {% for tenant in tenants %}
+            <option value="{{ tenant.id }}" {% if tenant.id == rent.tenant_id %}selected{% endif %}>
+                {{ tenant.name }}
+            </option>
+        {% endfor %}
+    </select><br><br>
+
+    <!-- Month -->
+    <label>Month:</label><br>
+    <select name="month" required>
+        {% for m in ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                     'September', 'October', 'November', 'December'] %}
+            <option value="{{ m }}" {% if m == rent.month %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <!-- Year -->
+    <label>Year:</label><br>
+    <input type="number" name="year" value="{{ rent.year }}" required><br><br>
+
+    <!-- Amount Paid -->
+    <label>Amount Paid (INR):</label><br>
+    <input type="number" name="amount_paid" value="{{ rent.amount_paid }}" required><br><br>
+
+    <!-- Payment Date -->
+    <label>Payment Date:</label><br>
+    <input type="date" name="payment_date" value="{{ rent.payment_date }}" required><br><br>
+
+    <!-- Remarks -->
+    <label>Remarks (optional):</label><br>
+    <input type="text" name="remarks" value="{{ rent.remarks }}"><br><br>
+
+    <!-- Submit -->
+    <input type="submit" value="Update Rent Entry">
+</form>
+{% endblock %}
