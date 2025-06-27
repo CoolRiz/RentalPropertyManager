@@ -34,10 +34,10 @@
     
         <td>
             <!-- Edit Button -->
-            <a href="{{ url_for('edit_tenant', tenant_id=t.id) }}" class="btn btn-sm btn-primary">Edit</a>
+            <a href="{{ url_for('app_routes.edit_tenant', tenant_id=t.id) }}" class="btn btn-sm btn-primary">Edit</a>
 
             <!-- Delete Button (POST form) -->
-            <form action="{{ url_for('delete_tenant', tenant_id=t.id) }}" method="POST" style="display:inline;">
+            <form action="{{ url_for('app_routes.delete_tenant', tenant_id=t.id) }}" method="POST" style="display:inline;">
                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
             </form>
         </td>

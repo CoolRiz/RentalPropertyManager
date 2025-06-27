@@ -109,8 +109,11 @@ def add_tenant():
             name=request.form["name"],
             contact=request.form["contact"],
             business_type=request.form["business_type"],
-            lease_start=request.form["lease_start"],
-            lease_end=request.form["lease_end"],
+
+            lease_start=datetime.strptime(request.form["lease_start"], "%Y-%m-%d").date(),
+            lease_end=datetime.strptime(request.form["lease_end"], "%Y-%m-%d").date(),
+#           lease_start=request.form["lease_start"],
+#           lease_end=request.form["lease_end"],
             rent=request.form["rent"],
             deposit=request.form["deposit"],
             property_id=request.form["property_id"]  # Link to selected property
@@ -157,8 +160,13 @@ def edit_tenant(tenant_id):
         tenant_obj.name = request.form["name"]
         tenant_obj.contact = request.form["contact"]
         tenant_obj.business_type = request.form["business_type"]
-        tenant_obj.lease_start = request.form["lease_start"]
-        tenant_obj.lease_end = request.form["lease_end"]
+
+        tenant_obj.lease_start = datetime.strptime(request.form["lease_start"], "%Y-%m-%d").date(),
+        tenant_obj.lease_end = datetime.strptime(request.form["lease_end"], "%Y-%m-%d").date(),
+
+#        tenant_obj.lease_start = request.form["lease_start"]
+#        tenant_obj.lease_end = request.form["lease_end"]
+
         tenant_obj.rent = request.form["rent"]
         tenant_obj.deposit = request.form["deposit"]
         tenant_obj.property_id = request.form["property_id"]
