@@ -11,6 +11,7 @@ import io
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from datetime import datetime, timedelta
+from flask_login import current_user
 
 
 app_routes = Blueprint('app_routes', __name__)
@@ -21,7 +22,7 @@ def index():
         return redirect(url_for("app_routes.dashboard"))
     return redirect(url_for("app_routes.login"))
 
-    
+
 # Route for the home page (optional — can be updated to show dashboard)
 @app_routes.route("/")
 @login_required
