@@ -5,9 +5,9 @@ from flask_login import UserMixin
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)  # Primary key for each user
-    username = db.Column(db.String(50), unique=True, nullable=False)  # Username (unique)
+    username = db.Column(db.String(80), unique=True, nullable=False)  # Username (unique)
     password = db.Column(db.String(255), nullable=False)  # Hashed password
-    role = db.Column(db.String(20), nullable=False)  # User role (Admin, Manager, etc.)
+    role = db.Column(db.String(50), nullable=False, default='viewer')  # User role (Admin, Manager, etc.)
 
     def __repr__(self):
         return f"<User {self.username}>"

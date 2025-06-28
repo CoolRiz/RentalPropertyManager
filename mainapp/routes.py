@@ -12,7 +12,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from datetime import datetime, timedelta
 from flask_login import current_user
-
+from mainapp.utils import role_required
 
 app_routes = Blueprint('app_routes', __name__)
 
@@ -51,8 +51,8 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("You have been logged out.")
-    return redirect(url_for("login"))
+    flash("You have been logged out.", "info")
+    return redirect(url_for("app_routes.login"))
 
 # Protect dashboard route
 @app_routes.route("/dashboard")
@@ -68,6 +68,7 @@ def dashboard():
 
 @app_routes.route("/add-property", methods=["GET", "POST"])
 @login_required
+@role_required("admin")  # Only admin can access
 def add_property():
     if request.method == "POST":
         # Extract form data submitted by user
@@ -101,6 +102,7 @@ def add_property():
 
 @app_routes.route("/add-tenant", methods=["GET", "POST"])
 @login_required
+@role_required("admin")  # Only admin can access
 def add_tenant():
     properties = Property.query.all()  # Fetch all properties to populate the dropdown
     if request.method == "POST":
@@ -151,6 +153,7 @@ def list_properties():
 # --------------------
 @app_routes.route("/edit-tenant/<int:tenant_id>", methods=["GET", "POST"])
 @login_required
+@role_required("admin")  # Only admin can access
 def edit_tenant(tenant_id):
     tenant_obj = Tenant.query.get_or_404(tenant_id)  # Fetch tenent or return 404 if not found
     properties = Property.query.all()  # Fetch all properties for dropdown
@@ -182,6 +185,8 @@ def edit_tenant(tenant_id):
 # --------------------
 @app_routes.route("/edit-property/<int:property_id>", methods=["GET", "POST"])
 @login_required
+@role_required("admin")  # Only admin can access
+
 def edit_property(property_id):
     property_obj = Property.query.get_or_404(property_id)  # Fetch property or return 404 if not found
 
@@ -205,6 +210,8 @@ def edit_property(property_id):
 # --------------------
 @app_routes.route("/delete-property/<int:property_id>", methods=["POST"])
 @login_required
+@role_required("admin")  # Only admin can access
+
 def delete_property(property_id):
     property_obj = Property.query.get_or_404(property_id)  # Fetch property or 404
     db.session.delete(property_obj)  # Delete from DB
@@ -217,6 +224,8 @@ def delete_property(property_id):
 # --------------------
 @app_routes.route("/delete-tenant/<int:tenant_id>", methods=["POST"])
 @login_required
+@role_required("admin")  # Only admin can access
+
 def delete_tenant(tenant_id):
     tenant_obj = Tenant.query.get_or_404(tenant_id)
     db.session.delete(tenant_obj)
@@ -283,6 +292,8 @@ def test_template():
 # --------------------
 @app_routes.route("/edit-rent/<int:rent_id>", methods=["GET", "POST"])
 @login_required
+@role_required("admin")  # Only admin can access
+
 def edit_rent(rent_id):
     rent = Rent.query.get_or_404(rent_id)  # Fetch the rent record by ID or return 404
     tenants = Tenant.query.all()  # Fetch tenants to populate dropdown
@@ -314,6 +325,8 @@ def edit_rent(rent_id):
 # -------------------------
 @app_routes.route("/delete-rent/<int:rent_id>", methods=["POST"])
 @login_required
+@role_required("admin")  # Only admin can access
+
 def delete_rent(rent_id):
     rent = Rent.query.get_or_404(rent_id)  # Find rent entry or return 404
     try:

@@ -13,6 +13,8 @@ migrate = Migrate()
 login_manager = LoginManager()
 login_manager.login_view = "app_routes.login"
 
+
+
 def create_app():
     app = Flask(__name__, template_folder='../templates')
 #    app.secret_key = "secret123"

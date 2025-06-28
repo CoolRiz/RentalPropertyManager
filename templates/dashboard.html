@@ -2,7 +2,25 @@
 
 {% block content %}
 
+<!-- Navigation Links -->
+<a href="{{ url_for('app_routes.home') }}">Home</a> |
 
+{% if current_user.role == 'admin' %}
+<a href="{{ url_for('app_routes.add_property') }}">Add Property</a> |
+<a href="{{ url_for('app_routes.add_tenant') }}">Add Tenant</a> |
+<a href="{{ url_for('app_routes.add_rent') }}">Add Rent</a> |
+
+{% endif %}
+
+<a href="{{ url_for('app_routes.list_tenants') }}">Tenant List</a> |
+<a href="{{ url_for('app_routes.list_properties') }}">Property List</a> |
+<a href="{{ url_for('app_routes.dashboard') }}">Dashboard</a> |
+
+
+<div class="text-end">
+  Welcome, <strong>{{ current_user.username }}</strong> |
+  <a href="{{ url_for('app_routes.logout') }}">Logout</a>
+</div>
 
 
 <div class="container py-4">
