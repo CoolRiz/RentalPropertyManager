@@ -1,0 +1,40 @@
+
+<h2>User Management</h2>
+
+<a href="{{ url_for('app_routes.add_user') }}">Add New User</a>
+
+<body>
+    
+<table border="1">
+  <tr>
+    <th>ID</th><th>Username</th><th>Role</th><th>Actions</th>
+  </tr>
+  {% for user in users %}
+  <tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.role }}</td>
+    <td>
+      {% if user.username != current_user.username %}
+        <a href="{{ url_for('app_routes.change_role', user_id=user.id) }}">Change Role</a>
+        <!-- Add delete option if needed -->
+      {% else %}
+        (You)
+      {% endif %}
+    </td>
+    <td>
+        <form action="{{ url_for('app_routes.delete_user', user_id=user.id) }}" method="POST" style="display:inline">
+            <button type="submit" onclick="return confirm('Delete this user?')">Delete</button>
+        </form>
+    </td>
+ 
+  </tr>
+  {% endfor %}
+</table>
+
+<br>
+    <a href="{{ url_for('app_routes.dashboard') }}">Back to Dashboard</a>
+</br>
+
+</body>
+

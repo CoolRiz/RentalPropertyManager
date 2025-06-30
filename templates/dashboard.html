@@ -1,106 +1,68 @@
-{% extends 'base.html' %}
+{% extends "layout.html" %}
+
+{% block title %}Dashboard | Rental Property Manager{% endblock %}
 
 {% block content %}
 
-<!-- Navigation Links -->
-<a href="{{ url_for('app_routes.home') }}">Home</a> |
 
-{% if current_user.role == 'admin' %}
-<a href="{{ url_for('app_routes.add_property') }}">Add Property</a> |
-<a href="{{ url_for('app_routes.add_tenant') }}">Add Tenant</a> |
-<a href="{{ url_for('app_routes.add_rent') }}">Add Rent</a> |
+<div class="container heading-container"
+>
+  <h3 class="subheading-gradient">Dashboard</h3>
 
-{% endif %}
+  <h4 class="subheading-shadow">Welcome, {{ current_user.username }}!</h4>
 
-<a href="{{ url_for('app_routes.list_tenants') }}">Tenant List</a> |
-<a href="{{ url_for('app_routes.list_properties') }}">Property List</a> |
-<a href="{{ url_for('app_routes.dashboard') }}">Dashboard</a> |
-
-
-<div class="text-end">
-  Welcome, <strong>{{ current_user.username }}</strong> |
-  <a href="{{ url_for('app_routes.logout') }}">Logout</a>
 </div>
 
-
-<div class="container py-4">
-    <div class="row g-3">
-        <div class="col-md-3 col-6">
-            <div class="card text-white bg-primary h-100">
-                <div class="card-body text-center">
-                    <h5>Total Properties</h5>
-                    <h3>{{ total_properties }}</h3>
-                </div>
-            </div>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-primary">
+        <div class="card-body">
+          <h5 class="card-title">Total Properties</h5>
+          <p class="card-text fs-4">{{ total_properties }}</p>
         </div>
-        <div class="col-md-3 col-6">
-            <div class="card text-white bg-success h-100">
-                <div class="card-body text-center">
-                    <h5>Total Tenants</h5>
-                    <h3>{{ total_tenants }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card text-white bg-warning h-100">
-                <div class="card-body text-center">
-                    <h5>Rent Collected</h5>
-                    <h3>&#8377;{{ total_rent_collected }}</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-6">
-            <div class="card text-white bg-danger h-100">
-                <div class="card-body text-center">
-                    <h5>Due Rent</h5>
-                    <h3>{{ pending_rent_tenants|length }}</h3>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!-- Section for alerts (below cards) -->
-    <div class="row mt-4">
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-danger text-white">View Due Rent Alerts</div>
-                <div class="card-body p-2">
-                    <ul class="list-group">
-                        {% for t in pending_rent_tenants %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ t.name }}
-                            <span class="badge bg-danger">Due</span>
-                        </li>
-                        {% endfor %}
-                        {% if pending_rent_tenants|length == 0 %}
-                        <li class="list-group-item">No due rent alerts</li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-success">
+        <div class="card-body">
+          <h5 class="card-title">Total Tenants</h5>
+          <p class="card-text fs-4">{{ total_tenants }}</p>
         </div>
-
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header bg-warning text-dark">Lease Expiry Alerts</div>
-                <div class="card-body p-2">
-                    <ul class="list-group">
-                        {% for t in lease_expiry_soon %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {{ t.name }} - {{ t.lease_end.strftime('%Y-%m-%d') }}
-                            <span class="badge bg-warning text-dark">Expiring</span>
-                        </li>
-                        {% endfor %}
-                        {% if lease_expiry_soon|length == 0 %}
-                        <li class="list-group-item">No lease expiry alerts</li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-info">
+        <div class="card-body">
+          <h5 class="card-title">Total Rent Entries</h5>
+          <p class="card-text fs-4">{{ total_rents }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mt-3">
+    <div class="col-md-4">
+      <div class="card text-white bg-warning">
+        <div class="card-body">
+          <h5 class="card-title">Due Rents</h5>
+          <p class="card-text fs-4">{{ due_rents }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-white bg-danger">
+        <div class="card-body">
+          <h5 class="card-title">Lease Expiry Soon</h5>
+          <p class="card-text fs-4">{{ expiring_leases }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-muted mt-5">© {{ current_year }} Rental Property Manager</p>
 </div>
-"""
-
-
 {% endblock %}
+

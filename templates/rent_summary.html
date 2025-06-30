@@ -27,7 +27,7 @@
     <button type="submit" class="btn btn-primary">Filter</button>
 
     <!-- Export Button -->
-    <a href="{{ url_for('export_rent_summary_pdf', month=selected_month, year=selected_year, property_id=selected_property_id) }}"
+    <a href="{{ url_for('app_routes.export_rent_summary_pdf', month=selected_month, year=selected_year, property_id=selected_property_id) }}"
        class="btn btn-sm btn-outline-primary" target="_blank">Export to PDF</a>
        
 </form>

@@ -1,0 +1,23 @@
+<h2>Add New User</h2>
+
+<body>
+<form method="POST">
+    <label>Username:</label>
+    <input type="text" name="username" required><br>
+
+    <label>Password:</label>
+    <input type="password" name="password" required><br>
+
+    <label>Role:</label>
+    <select name="role" required>
+        <option value="admin">Admin</option>
+        <option value="viewer">Viewer</option>
+    </select><br>
+
+    <button type="submit">Create User</button>
+</form>
+
+<br>
+    <a href="{{ url_for('app_routes.dashboard') }}">Back to Dashboard</a></br>
+
+</body>

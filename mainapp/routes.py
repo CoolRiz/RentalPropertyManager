@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash  # Import necessary Flask modules
 from flask_login import login_user, logout_user, login_required
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash , generate_password_hash
 from mainapp.models import User
 from mainapp import db   # Import Flask app and database instance
 from mainapp.models import Property, Tenant, Rent  # Import models
@@ -13,6 +13,8 @@ from reportlab.pdfgen import canvas
 from datetime import datetime, timedelta
 from flask_login import current_user
 from mainapp.utils import role_required
+
+
 
 app_routes = Blueprint('app_routes', __name__)
 
@@ -28,6 +30,7 @@ def index():
 @login_required
 def home():    
     return render_template("home.html")  # Load a template (can be replaced with dashboard)
+
 
 
 # Login route to show login form and authenticate user
@@ -54,12 +57,58 @@ def logout():
     flash("You have been logged out.", "info")
     return redirect(url_for("app_routes.login"))
 
-# Protect dashboard route
-@app_routes.route("/dashboard")
+#Manage users route
+@app_routes.route('/manage-users', methods=["GET", "POST"])
 @login_required
-def dashboard():
-    # Your dashboard logic here
-    return render_template("dashboard.html")
+@role_required('admin')
+def manage_users():
+    users = User.query.all()
+    return render_template('manage_users.html', users=users)
+
+#Routes for Add User
+@app_routes.route("/users/add", methods=["GET", "POST"])
+@login_required
+@role_required('admin')
+def add_user():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        role = request.form["role"]
+        hashed_pw = generate_password_hash(password)
+
+        new_user = User(username=username, password=hashed_pw, role=role)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("User created successfully!")
+        return redirect(url_for("app_routes.manage_users"))
+    return render_template("add_user.html")
+
+#Routes for Delete User
+
+@app_routes.route("/users/delete/<int:user_id>", methods=["POST"])
+@login_required
+@role_required('admin')
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted successfully!")
+    return redirect(url_for("app_routes.manage_users"))
+
+
+#Routes to change User Role
+@app_routes.route('/change-role/<int:user_id>')
+@login_required
+@role_required('admin')
+def change_role(user_id):
+    user = User.query.get_or_404(user_id)
+    if user.role == 'admin':
+        user.role = 'viewer'
+    else:
+        user.role = 'admin'
+    db.session.commit()
+    flash(f"Role updated for {user.username}!", "success")
+    return redirect(url_for('app_routes.manage_users'))
 
 
 # --------------------
@@ -413,26 +462,25 @@ def export_rent_summary_pdf():
     buffer.seek(0)
 
     return send_file(buffer, as_attachment=True, download_name="Rent_Summary_Report.pdf", mimetype="application/pdf")
-"""
+
+#Dashboard Route
+
 @app_routes.route("/dashboard")
+@login_required
 def dashboard():
     total_properties = Property.query.count()
     total_tenants = Tenant.query.count()
 
-    # Get current month/year
     now = datetime.now()
-    current_month = now.month
+    current_month = now.strftime('%B')
     current_year = now.year
 
-    # Total rent collected this month
     rents_this_month = Rent.query.filter_by(month=current_month, year=current_year).all()
     total_rent_collected = sum(r.amount_paid for r in rents_this_month)
 
-    # Tenants with no rent this month
     tenant_ids_paid = [r.tenant_id for r in rents_this_month]
     pending_rent_tenants = Tenant.query.filter(~Tenant.id.in_(tenant_ids_paid)).all()
 
-    # Leases expiring in next 30 days
     upcoming_expiry = datetime.now().date() + timedelta(days=30)
     lease_expiry_soon = Tenant.query.filter(Tenant.lease_end <= upcoming_expiry).all()
 
@@ -442,9 +490,11 @@ def dashboard():
         total_tenants=total_tenants,
         total_rent_collected=total_rent_collected,
         pending_rent_tenants=pending_rent_tenants,
-        lease_expiry_soon=lease_expiry_soon
+        lease_expiry_soon=lease_expiry_soon,
+        current_month=current_month,
+        current_year=current_year
     )
-"""
+
 @app_routes.route('/due-rents')
 @login_required
 def due_rents():

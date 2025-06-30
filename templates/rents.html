@@ -38,10 +38,10 @@
 
       <td>
         <!-- Edit Button -->
-        <a href="{{ url_for('edit_rent', rent_id=rent.id) }}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{{ url_for('app_routes.edit_rent', rent_id=rent.id) }}" class="btn btn-sm btn-warning">Edit</a>
 
         <!-- Delete Form Button -->
-        <form action="{{ url_for('delete_rent', rent_id=rent.id) }}" method="POST" style="display:inline;">
+        <form action="{{ url_for('app_routes.delete_rent', rent_id=rent.id) }}" method="POST" style="display:inline;">
             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
         </form>
       </td>
@@ -52,6 +52,6 @@
   </tbody>
 </table>
 
-<a href="{{ url_for('add_rent') }}">+ Add New Rent Entry</a>
+<a href="{{ url_for('app_routes.add_rent') }}">+ Add New Rent Entry</a>
 
 {% endblock %}
